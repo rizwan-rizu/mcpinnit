@@ -15,7 +15,7 @@ export function createServer(): McpServer {
     {{namePascal}}Tool.name,
     {{namePascal}}Tool.description,
     {{namePascal}}Tool.schema,
-    {{namePascal}}Tool.handler
+    (args, _extra) => {{namePascal}}Tool.handler(args)
   );
   {{/each}}
 

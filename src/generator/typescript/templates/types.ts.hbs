@@ -1,4 +1,9 @@
 import { z } from 'zod';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+
+export type { CallToolResult };
+
+export type ToolResult = CallToolResult;
 
 export interface ToolDefinition<TSchema extends Record<string, z.ZodTypeAny> = Record<string, z.ZodTypeAny>> {
   name: string;
@@ -7,13 +12,8 @@ export interface ToolDefinition<TSchema extends Record<string, z.ZodTypeAny> = R
   handler: (input: z.infer<z.ZodObject<TSchema>>) => Promise<ToolResult>;
 }
 
-export interface ToolResult {
-  content: Array<{ type: 'text'; text: string } | { type: 'image'; data: string; mimeType: string }>;
-  isError: boolean;
-}
-
 export function textResult(text: string): ToolResult {
-  return { content: [{ type: 'text', text }], isError: false };
+  return { content: [{ type: 'text', text }] };
 }
 
 export function errorResult(message: string): ToolResult {
