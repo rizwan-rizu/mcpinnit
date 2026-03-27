@@ -87,6 +87,119 @@ weather-tools/
 - **CLI:** commander, @inquirer/prompts, chalk, ora, handlebars
 - **Generated servers:** @modelcontextprotocol/sdk, zod, dotenv, vitest
 
+---
+
+## Local Development
+
+### Prerequisites
+
+- Node.js >= 18
+- npm
+
+### Setup
+
+```bash
+git clone https://github.com/rizwan-rizu/mcpinnit.git
+cd mcpinnit
+npm install
+```
+
+### Build
+
+```bash
+npm run build        # compile TypeScript → dist/
+npm run lint         # type-check only (no emit)
+```
+
+### Run the CLI locally
+
+```bash
+# Option A — run directly via tsx (no build needed)
+npm run dev
+
+# Option B — run the compiled output
+node dist/cli/index.js
+
+# Option C — link globally so `mcpinnit` works anywhere
+npm link
+mcpinnit --help
+```
+
+### End-to-end test
+
+The best way to verify everything works is to scaffold a server and test a tool:
+
+```bash
+# 1. Scaffold a test server
+node dist/cli/index.js
+#    → answer prompts: name=my-test-server, stdio, TypeScript, None, fetch
+
+# 2. Build the generated server
+cd my-test-server
+npm run build
+
+# 3. Test a tool
+node ../dist/cli/index.js test --tool fetch --input '{"url": "https://example.com"}'
+
+# 4. Test all tools
+node ../dist/cli/index.js test --all
+
+# 5. Generate Claude Desktop config (optional)
+node ../dist/cli/index.js install-claude
+```
+
+Expected output from step 3:
+
+```
+✅ Tool: fetch
+  ⏱  Latency: 312ms
+  📤 Input:  {"url":"https://example.com"}
+  📥 Output: {"status":200,"statusText":"OK",...}
+  ✅ Schema valid
+  ✅ Response within size limit (4.2kb / 25kb max)
+```
+
+### Run unit tests
+
+```bash
+npm test             # run vitest once
+npm run test:watch   # watch mode
+```
+
+### Project structure
+
+```
+mcpinnit/
+├── src/
+│   ├── cli/
+│   │   ├── index.ts          ← commander entry point + subcommands
+│   │   ├── scaffold.ts       ← 5-question interactive flow
+│   │   └── install-claude.ts ← Claude Desktop config writer
+│   ├── generator/
+│   │   └── typescript/
+│   │       ├── index.ts      ← orchestrates file generation
+│   │       └── templates/    ← Handlebars .hbs templates
+│   │           └── tools/    ← one template per tool type
+│   ├── tester/
+│   │   ├── runner.ts         ← spawns MCP server, sends tool calls via stdio
+│   │   ├── validator.ts      ← schema + size + latency checks
+│   │   └── reporter.ts       ← formatted terminal output
+│   ├── utils/
+│   │   ├── logger.ts         ← chalk + ora helpers
+│   │   ├── files.ts          ← fs-extra + Handlebars render
+│   │   └── detect.ts         ← detect MCP project root / language
+│   └── types.ts              ← shared TypeScript interfaces
+├── package.json
+└── tsconfig.json
+```
+
+### Contributing
+
+1. Fork the repo
+2. Create a feature branch: `git checkout -b feat/my-feature`
+3. Keep each feature in its own commit
+4. Open a pull request against `main`
+
 ## Roadmap
 
 - **v0.1** ✅ TypeScript scaffold + test runner
