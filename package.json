@@ -14,7 +14,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && rm -rf dist/generator/typescript/templates && cp -r src/generator/typescript/templates dist/generator/typescript/templates",
     "dev": "tsx src/cli/index.ts",
     "test": "vitest run",
     "test:watch": "vitest",
