@@ -1,0 +1,21 @@
+import type { IncomingMessage, ServerResponse } from 'http';
+
+export function validateApiKey(req: IncomingMessage): boolean {
+  const key =
+    (req.headers['x-api-key'] as string | undefined) ??
+    (req.headers['authorization'] as string | undefined)?.replace('Bearer ', '');
+  return key === process.env.API_KEY;
+}
+
+export function requireApiKey(
+  req: IncomingMessage,
+  res: ServerResponse,
+  next: () => void
+): void {
+  if (!validateApiKey(req)) {
+    res.writeHead(401, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Invalid or missing API key' }));
+    return;
+  }
+  next();
+}

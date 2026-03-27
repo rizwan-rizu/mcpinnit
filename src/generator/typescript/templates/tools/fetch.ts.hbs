@@ -1,0 +1,46 @@
+import { z } from 'zod';
+import type { ToolDefinition } from '../types.js';
+import { textResult, errorResult } from '../types.js';
+
+const schema = {
+  url: z.string().url().describe('The URL to fetch'),
+  method: z
+    .enum(['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
+    .optional()
+    .default('GET')
+    .describe('HTTP method to use'),
+  headers: z
+    .record(z.string())
+    .optional()
+    .describe('Optional HTTP headers as key-value pairs'),
+  body: z.string().optional().describe('Optional request body for POST/PUT/PATCH'),
+};
+
+async function handler(input: z.infer<z.ZodObject<typeof schema>>) {
+  try {
+    const res = await fetch(input.url, {
+      method: input.method,
+      headers: input.headers as Record<string, string> | undefined,
+      body: input.body,
+    });
+
+    const text = await res.text();
+    const summary = {
+      status: res.status,
+      statusText: res.statusText,
+      contentType: res.headers.get('content-type') ?? 'unknown',
+      body: text.length > 10_000 ? text.slice(0, 10_000) + '... (truncated)' : text,
+    };
+
+    return textResult(JSON.stringify(summary, null, 2));
+  } catch (err) {
+    return errorResult(`Fetch failed: ${err instanceof Error ? err.message : String(err)}`);
+  }
+}
+
+export const FetchTool: ToolDefinition<typeof schema> = {
+  name: 'fetch',
+  description: 'Fetch content from a URL and return the response body and metadata',
+  schema,
+  handler,
+};

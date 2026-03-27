@@ -1,0 +1,40 @@
+import { z } from 'zod';
+import type { ToolDefinition } from '../types.js';
+import { textResult, errorResult } from '../types.js';
+
+const schema = {
+  data: z.unknown().describe('The data to transform (any JSON-serialisable value)'),
+  operation: z
+    .string()
+    .describe(
+      'Description of the transformation to apply (e.g. "convert to CSV", "filter items where active=true", "summarise")'
+    ),
+  format: z
+    .enum(['json', 'csv', 'text', 'markdown'])
+    .optional()
+    .default('json')
+    .describe('Output format'),
+};
+
+async function handler(input: z.infer<z.ZodObject<typeof schema>>) {
+  try {
+    // TODO: Replace with your actual transformation logic
+    let transformed: unknown = input.data;
+
+    // Example transformations based on operation description:
+    // if (input.operation.includes('filter')) { ... }
+    // if (input.operation.includes('sort')) { ... }
+    // if (input.format === 'csv') { ... }
+
+    return textResult(JSON.stringify({ success: true, result: transformed }, null, 2));
+  } catch (err) {
+    return errorResult(`Transform failed: ${err instanceof Error ? err.message : String(err)}`);
+  }
+}
+
+export const TransformTool: ToolDefinition<typeof schema> = {
+  name: 'transform',
+  description: 'Transform or process data according to the specified operation',
+  schema,
+  handler,
+};

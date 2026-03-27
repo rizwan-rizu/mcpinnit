@@ -1,0 +1,49 @@
+import { z } from 'zod';
+import type { ToolDefinition } from '../types.js';
+import { textResult, errorResult } from '../types.js';
+
+const schema = {
+  operation: z
+    .enum(['create', 'read', 'update', 'delete'])
+    .describe('The CRUD operation to perform'),
+  resource: z.string().describe('The resource type (e.g. "user", "post", "order")'),
+  id: z.string().optional().describe('Resource ID (required for read, update, delete)'),
+  data: z.record(z.unknown()).optional().describe('Data payload for create or update operations'),
+};
+
+async function handler(input: z.infer<z.ZodObject<typeof schema>>) {
+  try {
+    // TODO: Replace with your actual data store (database, API, etc.)
+    let result: unknown;
+
+    switch (input.operation) {
+      case 'create':
+        // result = await db.create(input.resource, input.data);
+        result = { id: 'new-id', ...input.data };
+        break;
+      case 'read':
+        // result = await db.findById(input.resource, input.id);
+        result = { id: input.id, resource: input.resource };
+        break;
+      case 'update':
+        // result = await db.update(input.resource, input.id, input.data);
+        result = { id: input.id, ...input.data, updated: true };
+        break;
+      case 'delete':
+        // await db.delete(input.resource, input.id);
+        result = { id: input.id, deleted: true };
+        break;
+    }
+
+    return textResult(JSON.stringify({ success: true, operation: input.operation, data: result }, null, 2));
+  } catch (err) {
+    return errorResult(`${input.operation} failed: ${err instanceof Error ? err.message : String(err)}`);
+  }
+}
+
+export const CrudTool: ToolDefinition<typeof schema> = {
+  name: 'crud',
+  description: 'Perform create, read, update, or delete operations on a resource',
+  schema,
+  handler,
+};

@@ -1,0 +1,44 @@
+import { z } from 'zod';
+import type { ToolDefinition } from '../types.js';
+import { textResult, errorResult } from '../types.js';
+
+const schema = {
+  channel: z
+    .enum(['email', 'slack', 'webhook'])
+    .describe('The notification channel to use'),
+  recipient: z.string().describe('Recipient identifier (email address, Slack channel, webhook URL)'),
+  message: z.string().describe('The notification message body'),
+  subject: z.string().optional().describe('Optional subject line (used for email)'),
+};
+
+async function handler(input: z.infer<z.ZodObject<typeof schema>>) {
+  try {
+    // TODO: Replace with your actual notification implementation
+    let messageId = `msg-${Date.now()}`;
+
+    switch (input.channel) {
+      case 'email':
+        // await sendEmail({ to: input.recipient, subject: input.subject, body: input.message });
+        break;
+      case 'slack':
+        // await sendSlackMessage({ channel: input.recipient, text: input.message });
+        break;
+      case 'webhook':
+        // await fetch(input.recipient, { method: 'POST', body: JSON.stringify({ message: input.message }) });
+        break;
+    }
+
+    return textResult(
+      JSON.stringify({ success: true, channel: input.channel, messageId }, null, 2)
+    );
+  } catch (err) {
+    return errorResult(`Notification failed: ${err instanceof Error ? err.message : String(err)}`);
+  }
+}
+
+export const NotifyTool: ToolDefinition<typeof schema> = {
+  name: 'notify',
+  description: 'Send a notification via email, Slack, or webhook',
+  schema,
+  handler,
+};

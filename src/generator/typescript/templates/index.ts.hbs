@@ -1,0 +1,31 @@
+import 'dotenv/config';
+import { createServer } from './server.js';
+{{#if transportStdio}}
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+
+const server = createServer();
+const transport = new StdioServerTransport();
+
+await server.connect(transport);
+{{/if}}
+{{#if transportHttp}}
+import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+import express from 'express';
+
+const app = express();
+app.use(express.json());
+
+const server = createServer();
+const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+
+app.all('/mcp', async (req, res) => {
+  await transport.handleRequest(req, res, req.body);
+});
+
+const port = Number(process.env.MCP_SERVER_PORT ?? 3000);
+app.listen(port, () => {
+  console.error(`{{serverName}} MCP server listening on http://localhost:${port}/mcp`);
+});
+
+await server.connect(transport);
+{{/if}}

@@ -1,0 +1,14 @@
+import { describe, it, expect } from 'vitest';
+import { createServer } from '../src/server.js';
+
+describe('{{serverName}} MCP server', () => {
+  it('creates without throwing', () => {
+    expect(() => createServer()).not.toThrow();
+  });
+
+  it('has the correct server name', () => {
+    const server = createServer();
+    // McpServer exposes _serverInfo
+    expect((server as unknown as { _serverInfo: { name: string } })._serverInfo.name).toBe('{{serverName}}');
+  });
+});

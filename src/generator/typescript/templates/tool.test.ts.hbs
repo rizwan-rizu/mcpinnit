@@ -1,0 +1,21 @@
+import { describe, it, expect } from 'vitest';
+import { {{toolNamePascal}}Tool } from '../src/tools/{{toolName}}.js';
+
+describe('{{toolName}} tool', () => {
+  it('has correct name and description', () => {
+    expect({{toolNamePascal}}Tool.name).toBe('{{toolName}}');
+    expect({{toolNamePascal}}Tool.description).toBeTruthy();
+  });
+
+  it('has a valid schema', () => {
+    expect({{toolNamePascal}}Tool.schema).toBeDefined();
+  });
+
+  it('handler returns valid MCP content format', async () => {
+    // TODO: provide real input values for your tool
+    const result = await {{toolNamePascal}}Tool.handler({} as never);
+    expect(result).toHaveProperty('content');
+    expect(Array.isArray(result.content)).toBe(true);
+    expect(typeof result.isError).toBe('boolean');
+  });
+});

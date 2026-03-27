@@ -1,0 +1,9 @@
+services:
+  {{serverName}}:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+{{#if transportHttp}}
+    ports:
+      - "3000:3000"
+{{/if}}

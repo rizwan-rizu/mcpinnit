@@ -1,0 +1,27 @@
+import { z } from 'zod';
+import type { ToolDefinition } from '../types.js';
+import { textResult, errorResult } from '../types.js';
+
+// TODO: Define your input schema
+const schema = {
+  // example: z.string().describe('An example input field'),
+};
+
+// TODO: Implement your tool logic
+async function handler(_input: z.infer<z.ZodObject<typeof schema>>) {
+  try {
+    // TODO: Add your implementation here
+    const result = { message: 'blank tool executed' };
+    return textResult(JSON.stringify(result, null, 2));
+  } catch (err) {
+    return errorResult(`Tool failed: ${err instanceof Error ? err.message : String(err)}`);
+  }
+}
+
+export const BlankTool: ToolDefinition<typeof schema> = {
+  // TODO: Rename this tool
+  name: 'blank',
+  description: 'A blank tool template — replace this description with what your tool does',
+  schema,
+  handler,
+};

@@ -1,0 +1,23 @@
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+{{#each tools}}
+import { {{namePascal}}Tool } from './tools/{{name}}.js';
+{{/each}}
+
+export function createServer(): McpServer {
+  const server = new McpServer({
+    name: '{{serverName}}',
+    version: '1.0.0',
+    description: '{{serverDescription}}',
+  });
+
+  {{#each tools}}
+  server.tool(
+    {{namePascal}}Tool.name,
+    {{namePascal}}Tool.description,
+    {{namePascal}}Tool.schema,
+    {{namePascal}}Tool.handler
+  );
+  {{/each}}
+
+  return server;
+}

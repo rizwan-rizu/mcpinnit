@@ -1,0 +1,52 @@
+const CLIENT_ID = process.env.OAUTH_CLIENT_ID ?? '';
+const CLIENT_SECRET = process.env.OAUTH_CLIENT_SECRET ?? '';
+const REDIRECT_URI = process.env.OAUTH_REDIRECT_URI ?? 'http://localhost:3000/callback';
+const SCOPES = (process.env.OAUTH_SCOPES ?? 'read').split(',');
+
+export function buildAuthorizationUrl(provider: string, state: string): string {
+  const params = new URLSearchParams({
+    client_id: CLIENT_ID,
+    redirect_uri: REDIRECT_URI,
+    scope: SCOPES.join(' '),
+    response_type: 'code',
+    state,
+  });
+  return `${provider}/authorize?${params.toString()}`;
+}
+
+export async function exchangeCodeForToken(
+  provider: string,
+  code: string
+): Promise<{ access_token: string; refresh_token?: string; expires_in?: number }> {
+  const res = await fetch(`${provider}/token`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify({
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      code,
+      redirect_uri: REDIRECT_URI,
+      grant_type: 'authorization_code',
+    }),
+  });
+  if (!res.ok) throw new Error(`Token exchange failed: ${res.statusText}`);
+  return res.json() as Promise<{ access_token: string; refresh_token?: string; expires_in?: number }>;
+}
+
+export async function refreshAccessToken(
+  provider: string,
+  refreshToken: string
+): Promise<{ access_token: string; expires_in?: number }> {
+  const res = await fetch(`${provider}/token`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify({
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      refresh_token: refreshToken,
+      grant_type: 'refresh_token',
+    }),
+  });
+  if (!res.ok) throw new Error(`Token refresh failed: ${res.statusText}`);
+  return res.json() as Promise<{ access_token: string; expires_in?: number }>;
+}

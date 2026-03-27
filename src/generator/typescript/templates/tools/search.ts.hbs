@@ -1,0 +1,38 @@
+import { z } from 'zod';
+import type { ToolDefinition } from '../types.js';
+import { textResult, errorResult } from '../types.js';
+
+const schema = {
+  query: z.string().min(1).describe('The search query'),
+  limit: z.number().int().min(1).max(100).optional().default(10).describe('Max number of results to return'),
+  filters: z.record(z.string()).optional().describe('Optional key-value filters to apply'),
+};
+
+async function handler(input: z.infer<z.ZodObject<typeof schema>>) {
+  try {
+    // TODO: Replace with your actual search implementation
+    // Example: query a database, API, vector store, etc.
+    const results: Array<{ title: string; url: string; snippet: string }> = [];
+
+    return textResult(
+      JSON.stringify(
+        {
+          query: input.query,
+          total: results.length,
+          results,
+        },
+        null,
+        2
+      )
+    );
+  } catch (err) {
+    return errorResult(`Search failed: ${err instanceof Error ? err.message : String(err)}`);
+  }
+}
+
+export const SearchTool: ToolDefinition<typeof schema> = {
+  name: 'search',
+  description: 'Search and return a list of results matching the query',
+  schema,
+  handler,
+};

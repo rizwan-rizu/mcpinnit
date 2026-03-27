@@ -1,0 +1,46 @@
+{
+  "name": "{{serverName}}",
+  "version": "1.0.0",
+  "description": "{{serverDescription}}",
+  "author": "",
+  "license": "MIT",
+  "tags": [],
+  "transport": "{{transport}}",
+  "language": "typescript",
+  "auth": {
+    "type": "{{#if authApiKey}}api_key{{else}}{{#if authOAuth}}oauth2{{else}}none{{/if}}{{/if}}"
+  },
+  "tools": [
+    {{#each tools}}
+    {
+      "name": "{{name}}",
+      "description": "{{name}} tool",
+      "inputs": [],
+      "outputs": []
+    }{{#unless isLast}},{{/unless}}
+    {{/each}}
+  ],
+  "install": "npx mcpinnit install {{serverName}}",
+  "engines": {
+    "node": ">=18"
+  }{{#if authApiKey}},
+  "env": [
+    {
+      "key": "API_KEY",
+      "description": "API key for authentication",
+      "required": true
+    }
+  ]{{/if}}{{#if authOAuth}},
+  "env": [
+    {
+      "key": "OAUTH_CLIENT_ID",
+      "description": "OAuth client ID",
+      "required": true
+    },
+    {
+      "key": "OAUTH_CLIENT_SECRET",
+      "description": "OAuth client secret",
+      "required": true
+    }
+  ]{{/if}}
+}

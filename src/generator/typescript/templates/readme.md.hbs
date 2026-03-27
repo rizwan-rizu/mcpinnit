@@ -1,0 +1,115 @@
+# {{serverName}}
+
+{{serverDescription}}
+
+> Generated with [mcpinnit](https://mcpinnit.com) — init your MCP server in 60 seconds.
+
+## Tools
+
+{{#each tools}}
+### `{{name}}`
+
+{{#if (eq name "fetch")}}Fetch content from a URL and return the response body and status.{{/if}}
+{{#if (eq name "search")}}Search and return a list of matching results.{{/if}}
+{{#if (eq name "crud")}}Perform create, read, update, or delete operations on a resource.{{/if}}
+{{#if (eq name "notify")}}Send a notification via email, Slack, or webhook.{{/if}}
+{{#if (eq name "transform")}}Transform or process data according to a specified operation.{{/if}}
+{{#if (eq name "blank")}}A custom tool — fill in your implementation.{{/if}}
+
+{{/each}}
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js >= 18
+- npm
+
+### Install & Run
+
+```bash
+npm install
+npm run build
+npm start
+```
+
+### Development
+
+```bash
+npm run dev        # run with tsx (no build needed)
+npm test           # run tests
+```
+
+### Test a Tool
+
+```bash
+npx mcpinnit test --tool <tool-name> --input '{"key": "value"}'
+```
+
+## Connect to Claude Desktop
+
+Add the following to your `~/Library/Application Support/Claude/claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "{{serverName}}": {
+      "command": "node",
+      "args": ["{{serverName}}/dist/index.js"]{{#if authApiKey}},
+      "env": {
+        "API_KEY": "your-api-key-here"
+      }{{/if}}
+    }
+  }
+}
+```
+
+Or run automatically:
+
+```bash
+npx mcpinnit install-claude
+```
+
+## Connect to Claude Code
+
+Add to your project's `.mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "{{serverName}}": {
+      "command": "node",
+      "args": ["./dist/index.js"]
+    }
+  }
+}
+```
+
+## Deploy
+
+```bash
+# Docker
+docker build -t {{serverName}} .
+docker run {{serverName}}
+
+# One-click: Render, Railway, or Fly.io
+npx mcpinnit deploy
+```
+
+## Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `NODE_ENV` | Environment (`development` / `production`) | No |
+{{#if transportHttp}}| `MCP_SERVER_PORT` | HTTP port (default: 3000) | No |{{/if}}
+{{#if authApiKey}}| `API_KEY` | API key for authentication | Yes |{{/if}}
+{{#if authOAuth}}| `OAUTH_CLIENT_ID` | OAuth client ID | Yes |
+| `OAUTH_CLIENT_SECRET` | OAuth client secret | Yes |
+| `OAUTH_REDIRECT_URI` | OAuth redirect URI | Yes |
+| `OAUTH_SCOPES` | Comma-separated OAuth scopes | No |{{/if}}
+
+Copy `.env.example` to `.env` and fill in your values.
+
+---
+
+Built with [mcpinnit](https://mcpinnit.com) | [MCP Docs](https://modelcontextprotocol.io)

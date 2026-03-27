@@ -1,0 +1,31 @@
+{
+  "name": "{{serverName}}",
+  "version": "1.0.0",
+  "description": "{{serverDescription}}",
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "test": "vitest run"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.10.1",
+    "dotenv": "^16.4.7",
+    "zod": "^3.24.2"{{#if transportHttp}},
+    "express": "^4.21.2",
+    "@types/express": "^5.0.0"{{/if}}{{#if authApiKey}},
+    "express": "^4.21.2"{{/if}}
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.9"
+  }
+}
