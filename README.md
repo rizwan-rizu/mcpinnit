@@ -2,11 +2,15 @@
 
 > Init your MCP server in 60 seconds.
 
-**mcpinnit** is a scaffolding CLI that generates production-ready [MCP (Model Context Protocol)](https://modelcontextprotocol.io) servers from a 5-question interactive prompt — no boilerplate to write, no docs to read first.
+**mcpinnit** is a scaffolding CLI for building **custom MCP (Model Context Protocol) servers** — for your own product, internal API, or any system that doesn't have an MCP server yet.
 
 ```bash
 npx mcpinnit
 ```
+
+MCP lets AI assistants like Claude, Cursor, and others call your tools directly. mcpinnit handles all the infrastructure so you can focus on writing your actual tool logic.
+
+> **Not what you need?** If you're looking to connect Claude to GitHub, Stripe, Slack, Notion etc. — those platforms already publish official MCP servers. mcpinnit is for when you're building your own.
 
 ## What it does
 
@@ -50,14 +54,16 @@ npx mcpinnit test --tool fetch --input '{"url": "https://example.com"}'
 
 ## Tool Templates
 
-| Template | Description |
-|----------|-------------|
-| `fetch` | Fetch data from a URL |
-| `search` | Search and return results |
-| `crud` | Create, read, update, delete |
-| `notify` | Send notifications |
-| `transform` | Transform/process data |
-| `blank` | Empty template to fill in |
+These are **pattern starters** — not finished integrations. Each gives you a working skeleton with the right Zod schema shape and handler structure. You fill in your own logic.
+
+| Template | Pattern | Example use case |
+|----------|---------|-----------------|
+| `fetch` | HTTP request/response | Call your internal REST API |
+| `search` | Query and return a list | Search your product's database |
+| `crud` | Create, read, update, delete | Manage resources in your system |
+| `notify` | Trigger a notification | Send alerts via your own service |
+| `transform` | Input → processed output | Run a calculation or data pipeline |
+| `blank` | Empty starting point | Anything that doesn't fit above |
 
 ## Generated Project Structure
 
