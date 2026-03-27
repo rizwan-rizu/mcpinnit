@@ -4,7 +4,7 @@
   "description": "Init your MCP server in 60 seconds.",
   "type": "module",
   "bin": {
-    "mcpinnit": "./dist/cli/index.js"
+    "mcpinnit": "dist/cli/index.js"
   },
   "main": "./dist/cli/index.js",
   "files": [
@@ -33,7 +33,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rizwan-rizu/mcpinnit.git"
+    "url": "git+https://github.com/rizwan-rizu/mcpinnit.git"
   },
   "homepage": "https://mcpinnit.com",
   "dependencies": {
