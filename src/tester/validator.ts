@@ -42,8 +42,8 @@ export function validateToolResponse(
     }
   }
 
-  if (typeof res['isError'] !== 'boolean') {
-    errors.push('Response missing "isError" boolean');
+  if ('isError' in res && typeof res['isError'] !== 'boolean') {
+    errors.push('"isError" field must be a boolean when present');
   }
 
   const withinSizeLimit = sizeBytes <= MAX_RESPONSE_SIZE_BYTES;

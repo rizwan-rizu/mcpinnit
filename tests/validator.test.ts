@@ -35,8 +35,14 @@ describe('validateToolResponse', () => {
     expect(result.errors.some((e) => e.includes('"type"'))).toBe(true);
   });
 
-  it('fails when isError is missing', () => {
+  it('passes when isError is absent (it is optional)', () => {
     const result = validateToolResponse({ content: [{ type: 'text', text: 'hi' }] }, 100);
+    expect(result.schemaValid).toBe(true);
+    expect(result.errors).toHaveLength(0);
+  });
+
+  it('fails when isError is present but not a boolean', () => {
+    const result = validateToolResponse({ content: [{ type: 'text', text: 'hi' }], isError: 'yes' }, 100);
     expect(result.schemaValid).toBe(false);
     expect(result.errors.some((e) => e.includes('"isError"'))).toBe(true);
   });
