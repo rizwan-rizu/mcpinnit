@@ -47,10 +47,32 @@ npx mcpinnit test --tool fetch --input '{"url": "https://example.com"}'
 | Command | Description |
 |---------|-------------|
 | `npx mcpinnit` | Scaffold a new MCP server interactively |
+| `npx mcpinnit add-tool` | Add a new tool to an existing MCP server |
 | `npx mcpinnit test --tool <name> --input '<json>'` | Test a specific tool |
 | `npx mcpinnit test --all` | Test all tools |
 | `npx mcpinnit test --watch` | Watch mode |
 | `npx mcpinnit install-claude` | Write Claude Desktop config |
+
+## Adding Tools to an Existing Server
+
+Run this inside a scaffolded project to add another tool without starting from scratch:
+
+```bash
+cd my-server
+npx mcpinnit add-tool
+```
+
+You'll be prompted for a name, description, and template pattern. mcpinnit will:
+- Create `src/tools/<name>.ts` with the chosen template
+- Create `tests/<name>.test.ts`
+- Wire the tool into `src/server.ts` and `src/tools/index.ts` automatically
+- Add the tool entry to `.mcp/manifest.json`
+
+Then build and test:
+```bash
+npm run build
+npx mcpinnit test --tool <name> --input '{}'
+```
 
 ## Tool Templates
 

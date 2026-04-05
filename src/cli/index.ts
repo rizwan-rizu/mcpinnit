@@ -47,4 +47,13 @@ program
     await installClaude();
   });
 
+// add-tool subcommand
+program
+  .command('add-tool')
+  .description('Add a new tool to an existing MCP server')
+  .action(async () => {
+    const { runAddTool } = await import('./add-tool.js');
+    await runAddTool();
+  });
+
 program.parse();
