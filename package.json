@@ -1,6 +1,6 @@
 {
   "name": "mcpinnit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Init your MCP server in 60 seconds.",
   "type": "module",
   "bin": {
