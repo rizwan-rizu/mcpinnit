@@ -230,9 +230,10 @@ mcpinnit/
 
 ## Roadmap
 
-- **v0.1** ✅ TypeScript scaffold + test runner
-- **v0.2** Python support, `add-tool`, `lint`, deploy templates, Inspector UI
-- **v0.3** Registry at [mcpinnit.com](https://mcpinnit.com) — publish & discover MCP servers
+- **v0.1** ✅ TypeScript scaffold + 6 tool templates + test runner + Claude Desktop config
+- **v0.1.1** ✅ `add-tool` command — extend existing servers without starting over
+- **v0.2** Python support, `lint` command, MCP Inspector integration (`--inspect` flag)
+- **v0.3** Registry at [mcpinnit.com](https://mcpinnit.com) — publish & discover community MCP servers
 
 ## License
 
