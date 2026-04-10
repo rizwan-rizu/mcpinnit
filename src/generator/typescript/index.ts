@@ -40,6 +40,11 @@ export async function generateTypeScriptProject(opts: ScaffoldOptions): Promise<
       namePascal: toPascalCase(t),
       isLast: false,
     })),
+    apiBaseUrl: opts.apiBaseUrl ?? '',
+    hasApiBaseUrl: !!opts.apiBaseUrl,
+    defaultHttpMethod: opts.defaultHttpMethod ?? 'GET',
+    envVars: (opts.envVars ?? []).map((v) => ({ name: v })),
+    hasEnvVars: (opts.envVars ?? []).length > 0,
     version: '1.0.0',
     year: new Date().getFullYear(),
   };

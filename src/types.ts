@@ -5,6 +5,9 @@ export interface ScaffoldOptions {
   language: 'typescript' | 'python';
   auth: 'none' | 'api-key' | 'oauth2';
   tools: string[];
+  apiBaseUrl?: string;
+  defaultHttpMethod?: string;
+  envVars?: string[];
 }
 
 export interface MCPManifest {

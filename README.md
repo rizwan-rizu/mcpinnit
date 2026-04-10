@@ -15,8 +15,9 @@ MCP lets AI assistants like Claude, Cursor, and others call your tools directly.
 ## What it does
 
 1. **Scaffold** — `npx mcpinnit` generates a complete, working MCP server with tool definitions, Zod schemas, tests, Dockerfile, and README
-2. **Test** — `npx mcpinnit test` lets you test tools locally without opening Claude Desktop
-3. **Connect** — `npx mcpinnit install-claude` writes your Claude Desktop config automatically
+2. **Extend** — `npx mcpinnit add-tool` adds a new tool to an existing server and wires it up automatically
+3. **Test** — `npx mcpinnit test` lets you test tools locally without opening Claude Desktop
+4. **Connect** — `npx mcpinnit install-claude` writes your Claude Desktop config automatically
 
 ## Quick Start
 
@@ -24,14 +25,22 @@ MCP lets AI assistants like Claude, Cursor, and others call your tools directly.
 npx mcpinnit
 ```
 
-Answer 5 questions, get a production-ready MCP server:
+Answer a few questions, get a production-ready MCP server:
 
 ```
 ? What is your server name? › weather-tools
+? Short description? › Fetch weather data for any location
 ? Choose transport layer: › stdio (recommended)
 ? Choose language: › TypeScript
 ? Add authentication? › None
 ? Which tool templates to include? › fetch, search
+
+# If fetch is selected, two follow-up questions appear:
+? API base URL? (optional) › https://api.openweathermap.org
+? Default HTTP method? › GET
+
+# For all servers:
+? Environment variables your server needs? › WEATHER_API_KEY
 ```
 
 Then:
