@@ -77,6 +77,39 @@ export async function scaffold(): Promise<void> {
     },
   });
 
+  // Contextual follow-up questions based on selected tools
+  let apiBaseUrl: string | undefined;
+  let defaultHttpMethod = 'GET';
+
+  if (selectedTools.includes('fetch')) {
+    const baseUrl = await input({
+      message: 'API base URL? (optional — press Enter to skip)',
+      default: '',
+    });
+    apiBaseUrl = baseUrl.trim() || undefined;
+
+    defaultHttpMethod = await select<string>({
+      message: 'Default HTTP method for fetch tool?',
+      default: 'GET',
+      choices: [
+        { value: 'GET' },
+        { value: 'POST' },
+        { value: 'PUT' },
+        { value: 'PATCH' },
+        { value: 'DELETE' },
+      ],
+    });
+  }
+
+  const envVarsInput = await input({
+    message: 'Environment variables your server needs? (comma-separated, e.g. API_KEY,DB_URL — press Enter to skip)',
+    default: '',
+  });
+  const envVars = envVarsInput
+    .split(',')
+    .map((v) => v.trim().toUpperCase())
+    .filter(Boolean);
+
   const options: ScaffoldOptions = {
     serverName: toKebabCase(serverName),
     serverDescription,
@@ -84,6 +117,9 @@ export async function scaffold(): Promise<void> {
     language,
     auth,
     tools: selectedTools,
+    apiBaseUrl,
+    defaultHttpMethod,
+    envVars,
   };
 
   console.log('');

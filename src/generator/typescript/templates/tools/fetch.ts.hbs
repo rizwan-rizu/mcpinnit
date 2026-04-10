@@ -1,13 +1,21 @@
 import { z } from 'zod';
 import type { ToolDefinition } from '../types.js';
 import { textResult, errorResult } from '../types.js';
+{{#if hasApiBaseUrl}}
+
+const API_BASE_URL = process.env.API_BASE_URL ?? '{{apiBaseUrl}}';
+{{/if}}
 
 const schema = {
+{{#if hasApiBaseUrl}}
+  url: z.string().describe('Path or full URL (e.g. /users/123)'),
+{{else}}
   url: z.string().url().describe('The URL to fetch'),
+{{/if}}
   method: z
     .enum(['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
     .optional()
-    .default('GET')
+    .default('{{defaultHttpMethod}}')
     .describe('HTTP method to use'),
   headers: z
     .record(z.string())
@@ -18,7 +26,12 @@ const schema = {
 
 async function handler(input: z.infer<z.ZodObject<typeof schema>>) {
   try {
-    const res = await fetch(input.url, {
+{{#if hasApiBaseUrl}}
+    const resolvedUrl = input.url.startsWith('http') ? input.url : `${API_BASE_URL}${input.url}`;
+{{else}}
+    const resolvedUrl = input.url;
+{{/if}}
+    const res = await fetch(resolvedUrl, {
       method: input.method,
       headers: input.headers as Record<string, string> | undefined,
       body: input.body,
