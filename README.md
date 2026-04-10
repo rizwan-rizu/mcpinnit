@@ -1,5 +1,9 @@
 # mcpinnit
 
+[![CI](https://github.com/rizwan-rizu/mcpinnit/actions/workflows/ci.yml/badge.svg)](https://github.com/rizwan-rizu/mcpinnit/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/mcpinnit)](https://www.npmjs.com/package/mcpinnit)
+[![CodeRabbit Reviews](https://img.shields.io/coderabbit/prs/github/rizwan-rizu/mcpinnit?utm_source=oss&utm_medium=github&utm_campaign=rizwan-rizu%2Fmcpinnit&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)](https://coderabbit.ai)
+
 > Init your MCP server in 60 seconds.
 
 **mcpinnit** is a scaffolding CLI for building **custom MCP (Model Context Protocol) servers** — for your own product, internal API, or any system that doesn't have an MCP server yet.
